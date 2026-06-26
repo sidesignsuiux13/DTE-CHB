@@ -28,7 +28,6 @@ const ROLE_ICON: Record<Role, any> = {
   principal: GraduationCap,
   candidate: UserCircle2,
   lecturer: UserCircle2,
-  accounts: Wallet,
 };
 
 const ROLE_TONE: Record<Role, string> = {
@@ -37,7 +36,6 @@ const ROLE_TONE: Record<Role, string> = {
   principal: "from-accent to-warning",
   candidate: "from-primary to-accent",
   lecturer: "from-primary to-accent",
-  accounts: "from-warning to-accent",
 };
 
 const STATS = [

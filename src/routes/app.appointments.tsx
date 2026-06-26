@@ -36,7 +36,7 @@ function Appointments() {
     }
   }, []);
 
-  const appointments = [...offers, ...APPTS];
+  const appointments: Appointment[] = [...offers, ...APPTS];
 
   return (
     <div>

@@ -39,13 +39,6 @@ function Dashboard() {
           { icon: Calendar, label: "Lectures (this month)", value: "48 hrs", tone: "accent" as const },
           { icon: Banknote, label: "Bill Status", value: "₹36,000", tone: "success" as const, trend: { value: "Approved", up: true } },
         ];
-      case "accounts":
-        return [
-          { icon: Banknote, label: "Pending Bills", value: "187", tone: "warning" as const },
-          { icon: ClipboardCheck, label: "Payments Processed (MTD)", value: "1,204", tone: "success" as const, trend: { value: "+8.2%", up: true } },
-          { icon: TrendingUp, label: "Expenditure (MTD)", value: "₹4.82 Cr", tone: "primary" as const, trend: { value: "+4.1%", up: true } },
-          { icon: AlertTriangle, label: "Failed Payments", value: "6", tone: "accent" as const },
-        ];
       case "principal":
         return [
           { icon: Briefcase, label: "Open Vacancies", value: "8", tone: "accent" as const },

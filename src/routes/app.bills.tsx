@@ -36,16 +36,35 @@ function Bills() {
   const { role } = useRole();
   const isPrincipal = role === "principal";
   const isRegional = role === "regional";
+  const isLecturer = role === "lecturer";
 
   const [decisions, setDecisions] = useState<Record<string, "Approved by Principal" | "Approved" | "Rejected">>({});
   const [pending, setPending] = useState<{ bill: Bill; decision: Decision } | null>(null);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+  const [receiptBill, setReceiptBill] = useState<Bill | null>(null);
   const [reason, setReason] = useState("");
   const visibleBills = isPrincipal
     ? BILLS.filter((bill) => bill.status !== "HOD Approved")
     : BILLS;
+  const lecturerBills: Bill[] = [
+    ...BILLS.filter((bill) => bill.lecturer === "Rahul M. Deshpande"),
+    {
+      id: "BIL-2025-2197",
+      college: "Govt. Polytechnic, Mumbai",
+      lecturer: "Rahul M. Deshpande",
+      month: "Apr 2025",
+      hours: 44,
+      rate: 800,
+      amount: 35200,
+      status: "Paid",
+      submitted: "2025-05-04",
+    },
+  ].map((bill) => ({
+    ...bill,
+    status: bill.status === "Paid" ? "Paid" : "Pending",
+  }));
   const canActFromDrawer = (bill: Bill) => {
-    const status = decisions[bill.id] ?? bill.status;
+    const status = (decisions[bill.id] ?? bill.status) as string;
     if (decisions[bill.id] || status === "Rejected" || status === "Paid" || status === "Payment Processing") return false;
     if (isRegional) return bill.status === "Sent by Principal";
     return isPrincipal;
@@ -75,6 +94,131 @@ function Bills() {
     setPending(null);
     setReason("");
   };
+
+  if (isLecturer) {
+    const paidBills = lecturerBills.filter((bill) => bill.status === "Paid");
+    const pendingBills = lecturerBills.filter((bill) => bill.status === "Pending");
+    const paidValue = paidBills.reduce((sum, bill) => sum + bill.amount, 0);
+    const pendingValue = pendingBills.reduce((sum, bill) => sum + bill.amount, 0);
+
+    return (
+      <div>
+        <PageHeader
+          title="My Bills"
+          subtitle="Track submitted CHB bills and download paid receipts"
+          actions={<Button variant="outline" size="sm"><Download className="mr-1.5 h-4 w-4" />Export</Button>}
+        />
+
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <KpiCard icon={Receipt} label="Bills Submitted" value={String(lecturerBills.length)} tone="primary" />
+          <KpiCard icon={CheckCircle2} label="Paid" value={String(paidBills.length)} tone="success" />
+          <KpiCard icon={Clock} label="Pending" value={String(pendingBills.length)} tone="warning" />
+          <KpiCard icon={IndianRupee} label="Paid Value" value={`₹${paidValue.toLocaleString()}`} tone="accent" />
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <p className="text-xs font-medium text-muted-foreground">Pending Amount</p>
+            <p className="mt-1 text-xl font-bold">₹{pendingValue.toLocaleString()}</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <p className="text-xs font-medium text-muted-foreground">Last Paid Bill</p>
+            <p className="mt-1 text-xl font-bold">{paidBills[0]?.month ?? "—"}</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <p className="text-xs font-medium text-muted-foreground">Receipt Availability</p>
+            <p className="mt-1 text-xl font-bold">{paidBills.length} ready</p>
+          </div>
+        </div>
+
+        <Card className="mt-4">
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Bill ID</TableHead>
+                  <TableHead>Month</TableHead>
+                  <TableHead className="text-right">Hours</TableHead>
+                  <TableHead className="text-right">Rate</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead>Submitted</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {lecturerBills.map((bill) => (
+                  <TableRow key={bill.id}>
+                    <TableCell className="font-mono text-xs">{bill.id}</TableCell>
+                    <TableCell>{bill.month}</TableCell>
+                    <TableCell className="text-right">{bill.hours}</TableCell>
+                    <TableCell className="text-right">₹{bill.rate}</TableCell>
+                    <TableCell className="text-right font-semibold">₹{bill.amount.toLocaleString()}</TableCell>
+                    <TableCell className="text-muted-foreground">{bill.submitted}</TableCell>
+                    <TableCell><StatusBadge status={bill.status} /></TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        disabled={bill.status !== "Paid"}
+                        onClick={() => setReceiptBill(bill)}
+                      >
+                        Details
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Dialog open={!!receiptBill} onOpenChange={(open) => { if (!open) setReceiptBill(null); }}>
+          <DialogContent className="max-w-lg">
+            {receiptBill && (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Receipt className="h-5 w-5 text-primary" /> Payment Receipt
+                  </DialogTitle>
+                  <DialogDescription>{receiptBill.id} · {receiptBill.month}</DialogDescription>
+                </DialogHeader>
+                <div className="rounded-lg border border-border bg-card p-5">
+                  <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">DTE Maharashtra</p>
+                      <p className="mt-1 text-lg font-bold">CHB Lecturer Payment Receipt</p>
+                    </div>
+                    <StatusBadge status="Paid" />
+                  </div>
+                  <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                    <DetailTile icon={UserRound} label="Lecturer" value={receiptBill.lecturer} />
+                    <DetailTile icon={CalendarDays} label="Payment Date" value="2025-05-12" />
+                    <DetailTile icon={Clock} label="Hours" value={`${receiptBill.hours} hrs`} />
+                    <DetailTile icon={IndianRupee} label="Amount Paid" value={`₹${receiptBill.amount.toLocaleString()}`} />
+                  </div>
+                  <div className="mt-4 rounded-md bg-muted/40 p-3 text-sm">
+                    <p><span className="font-semibold">UTR:</span> HDFC0234198721</p>
+                    <p><span className="font-semibold">Rate:</span> ₹{receiptBill.rate}/hr</p>
+                    <p><span className="font-semibold">Status:</span> Paid and reconciled</p>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setReceiptBill(null)}>Close</Button>
+                  <Button
+                    className="bg-accent text-accent-foreground hover:bg-accent/90"
+                    onClick={() => toast.success("Receipt PDF export started")}
+                  >
+                    <Download className="mr-1.5 h-4 w-4" />Export PDF
+                  </Button>
+                </DialogFooter>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
 
   return (
     <div>
