@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/lib/role-context";
@@ -16,7 +17,6 @@ import {
   GraduationCap,
   HelpCircle,
   Image,
-  Landmark,
   Mail,
   MapPin,
   Menu,
@@ -45,12 +45,40 @@ const updates = [
   "DTE Maharashtra invites online applications for polytechnic and engineering faculty onboarding workflows",
 ];
 
+const heroSlides = [
+  {
+    eyebrow: "Building Technical Futures",
+    title: <>Where Students<br />Learn<br /><span className="text-orange-500">With Technology</span></>,
+    description: "Computer labs, digital classrooms and institute systems that strengthen technical education across Maharashtra.",
+    primary: "Explore Institutes",
+    secondary: "Open DTE Portal",
+    image: "/hero/dte-event-1.png",
+  },
+  {
+    eyebrow: "CHB Faculty Lifecycle",
+    title: <>Where Skills<br />Meet<br /><span className="text-orange-500">Maharashtra's Growth</span></>,
+    description: "A unified digital platform for technical institutes, CHB faculty onboarding, attendance, approvals, admissions and academic governance.",
+    primary: "View Faculty Flow",
+    secondary: "Login to Dashboard",
+    image: "/hero/dte-event-2.png",
+  },
+  {
+    eyebrow: "Industry Ready Learning",
+    title: <>Modern Labs<br />For<br /><span className="text-orange-500">Future Engineers</span></>,
+    description: "Supporting polytechnics and engineering institutes with transparent governance, faculty workflows and student-focused services.",
+    primary: "Discover Programs",
+    secondary: "Browse Notices",
+    image: "/hero/dte-campus-1.png",
+  },
+];
+
 const leaders = [
-  { name: "Shri. Devendra Fadnavis", title: "Hon. Chief Minister", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=180&q=80" },
-  { name: "Shri. Eknath Shinde", title: "Hon. Deputy Chief Minister", image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=180&q=80" },
-  { name: "Smt. Sunetra Ajit Pawar", title: "Hon. Minister", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=180&q=80" },
-  { name: "Shri. Ranjit Singh Deol IAS", title: "Principal Secretary", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=180&q=80" },
-  { name: "Dr. R. M. Deshmukh", title: "Director, Technical Education", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=180&q=80" },
+  { name: "Shri. Devendra Fadnavis", title: "Hon. Chief Minister", image: "/leaders/devendra-fadnavis.png" },
+  { name: "Shri. Eknath Shinde", title: "Hon. Deputy Chief Minister", image: "/leaders/eknath-shinde.png" },
+  { name: "Smt. Sunetra Ajit Pawar", title: "Hon. Minister", image: "/leaders/sunetra-pawar.png" },
+  { name: "Shri. Chandrakantdada Patil", title: "Hon. Higher & Technical Education Minister", image: "/leaders/chandrakantdada-patil.png" },
+  { name: "Shri. Indranil Naik", title: "Hon'ble Minister of State, Higher and Technical Education", image: "/leaders/indranil-naik.png" },
+  { name: "Shri B Venugopal Reddy, IAS", title: "Hon. Addl. Chief Secretary, Higher & Technical Education", image: "/leaders/b-venugopal-reddy.png" },
 ];
 
 const news = [
@@ -102,6 +130,7 @@ function LandingPage() {
       <Header onLogin={() => signIn("principal")} onRegister={() => signIn("candidate")} />
       <Hero />
       <Ticker />
+      <DirectorDesk />
       <main>
         <Leadership />
         <NewsSection />
@@ -140,11 +169,11 @@ function Header({ onLogin, onRegister }: { onLogin: () => void; onRegister: () =
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
         <div className="flex items-center gap-5">
-          <div className="flex h-16 w-16 items-center justify-center border-r border-slate-200 pr-5 text-slate-700">
-            <Landmark className="h-10 w-10" />
+          <div className="flex h-16 w-16 items-center justify-center border-r border-slate-200 pr-5">
+            <img src="/brand/dte-logo.gif" alt="Department of Technical Education logo" className="h-14 w-14 object-contain" />
           </div>
           <div className="text-center sm:text-left">
-            <p className="text-sm font-bold text-[#272484]">क्रीडा व युवक सेवा विभाग</p>
+            <p className="text-sm font-bold text-[#272484]">तांत्रिक शिक्षण विभाग</p>
             <h1 className="text-lg font-extrabold leading-tight tracking-tight text-slate-950 sm:text-xl">
               Department of Technical Education
             </h1>
@@ -194,38 +223,65 @@ function Header({ onLogin, onRegister }: { onLogin: () => void; onRegister: () =
 }
 
 function Hero() {
+  const [active, setActive] = useState(0);
+  const slide = heroSlides[active];
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActive((current) => (current + 1) % heroSlides.length);
+    }, 6500);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const goTo = (index: number) => setActive((index + heroSlides.length) % heroSlides.length);
+
   return (
     <section className="relative min-h-[440px] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1800&q=85')",
-        }}
-      />
+      {heroSlides.map((item, index) => (
+        <div
+          key={item.image}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${index === active ? "opacity-100" : "opacity-0"}`}
+          style={{ backgroundImage: `url('${item.image}')` }}
+        />
+      ))}
       <div className="absolute inset-0 bg-gradient-to-r from-[#10184f]/95 via-[#121a51]/70 to-orange-500/25" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent" />
-      <button className="absolute left-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur">‹</button>
-      <button className="absolute right-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur">›</button>
+      <button
+        aria-label="Previous slide"
+        className="absolute left-5 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur transition hover:bg-white/30"
+        onClick={() => goTo(active - 1)}
+      >
+        ‹
+      </button>
+      <button
+        aria-label="Next slide"
+        className="absolute right-5 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur transition hover:bg-white/30"
+        onClick={() => goTo(active + 1)}
+      >
+        ›
+      </button>
       <div className="relative mx-auto flex min-h-[440px] max-w-6xl items-center px-4 py-20">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.35em] text-orange-500">Building Technical Futures</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.35em] text-orange-500">{slide.eyebrow}</p>
           <h2 className="mt-4 text-5xl font-extrabold leading-[0.98] tracking-tight text-white sm:text-6xl">
-            Where Skills<br />
-            Meets<br />
-            <span className="text-orange-500">Maharashtra's Growth</span>
+            {slide.title}
           </h2>
           <p className="mt-5 max-w-lg text-sm leading-6 text-white/85">
-            A unified digital platform for technical institutes, CHB faculty onboarding, attendance, approvals, admissions and academic governance.
+            {slide.description}
           </p>
           <div className="mt-7 flex gap-3">
-            <Button className="bg-orange-500 text-white hover:bg-orange-600">Explore Institutes</Button>
-            <Button variant="outline" className="border-white/50 bg-white/10 text-white hover:bg-white/20">Open DTE Portal</Button>
+            <Button className="bg-orange-500 text-white hover:bg-orange-600">{slide.primary}</Button>
+            <Button variant="outline" className="border-white/50 bg-white/10 text-white hover:bg-white/20">{slide.secondary}</Button>
           </div>
           <div className="mt-8 flex gap-2">
-            <span className="h-1.5 w-10 rounded-full bg-orange-500" />
-            <span className="h-1.5 w-4 rounded-full bg-white/50" />
-            <span className="h-1.5 w-4 rounded-full bg-white/50" />
+            {heroSlides.map((item, index) => (
+              <button
+                key={item.eyebrow}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-1.5 rounded-full transition-all ${index === active ? "w-10 bg-orange-500" : "w-4 bg-white/50 hover:bg-white/80"}`}
+                onClick={() => goTo(index)}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -243,6 +299,36 @@ function Ticker() {
         ))}
       </div>
     </div>
+  );
+}
+
+function DirectorDesk() {
+  return (
+    <section className="bg-white py-12">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[260px_1fr] lg:items-center">
+        <div className="text-center lg:text-left">
+          <img
+            src="/leaders/vinod-mohitkar.png"
+            alt="Dr. Vinod Mohitkar"
+            className="mx-auto h-36 w-36 rounded-full object-cover ring-4 ring-slate-100 lg:mx-0"
+          />
+          <p className="mt-4 text-lg font-extrabold text-slate-950">Dr. Vinod Mohitkar</p>
+          <p className="mt-1 text-sm font-semibold text-[#242083]">Director, DTE</p>
+        </div>
+        <div className="border-l-4 border-orange-500 pl-5">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-orange-500">Director&apos;s Desk</p>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Message from Director&apos;s Desk</h2>
+          <div className="mt-4 space-y-4 text-sm leading-7 text-slate-600">
+            <p>
+              In today&apos;s global and digital world, education, especially technical education, plays a vital role. Directorate of Technical Education offers various technical programmes and courses at Diploma, Graduate, Post-Graduate and Research level for building careers in various socio-economic sectors.
+            </p>
+            <p>
+              The Directorate of Technical Education, Maharashtra State has been established to formulate policies, rules and guidelines in accordance with State and Central Government directives and execute them accordingly. Under the umbrella of the Directorate, there are around 1600 technical institutions spread across Maharashtra. There are six regional Technical Education Offices: Amravati, Aurangabad, Mumbai, Nagpur, Nashik and Pune.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -280,12 +366,12 @@ function NewsSection() {
       <SectionHeading title="News & Announcements" action="View All News" />
       <div className="grid gap-5 lg:grid-cols-[1.1fr_1fr]">
         <article className="relative min-h-[310px] overflow-hidden rounded-xl">
-          <img src="https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=900&q=80" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <img src="/news/dte-digital-workflows.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
           <div className="absolute bottom-0 p-6 text-white">
             <span className="rounded bg-orange-500 px-2 py-1 text-[10px] font-extrabold uppercase">Featured</span>
-            <h3 className="mt-3 max-w-md text-2xl font-extrabold leading-tight">Maharashtra wins 186 medals at Khelo India Youth Games 2026</h3>
-            <p className="mt-2 text-xs text-white/75">June 4, 2026 · Chennai</p>
+            <h3 className="mt-3 max-w-md text-2xl font-extrabold leading-tight">DTE Maharashtra launches unified digital workflows for technical institutes</h3>
+            <p className="mt-2 text-xs text-white/75">June 4, 2026 · Mumbai</p>
           </div>
         </article>
         <div className="space-y-4">
@@ -386,8 +472,8 @@ function Footer() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#17105f]">
-              <Landmark className="h-7 w-7" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white p-1">
+              <img src="/brand/dte-logo.gif" alt="Department of Technical Education logo" className="h-full w-full object-contain" />
             </div>
             <div>
               <p className="font-extrabold">Government of Maharashtra</p>

@@ -78,8 +78,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 function SidebarHeader({ open }: { open: boolean }) {
   return (
     <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground font-bold">
-        म
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm">
+        <img src="/brand/dte-logo.gif" alt="Department of Technical Education logo" className="h-full w-full object-contain" />
       </div>
       {open && (
         <div className="min-w-0">

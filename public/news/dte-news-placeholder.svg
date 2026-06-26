@@ -1,0 +1,17 @@
+<svg width="900" height="520" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="520" fill="#EEF4FF"/>
+  <rect x="64" y="70" width="772" height="380" rx="26" fill="white"/>
+  <rect x="92" y="104" width="716" height="54" rx="12" fill="#E7ECF7"/>
+  <circle cx="124" cy="131" r="11" fill="#F97316"/>
+  <circle cx="157" cy="131" r="11" fill="#242083"/>
+  <circle cx="190" cy="131" r="11" fill="#22C55E"/>
+  <rect x="126" y="207" width="260" height="166" rx="18" fill="#DDE7FF"/>
+  <path d="M154 341L219 278L270 325L311 287L358 341H154Z" fill="#242083"/>
+  <circle cx="306" cy="253" r="26" fill="#F97316"/>
+  <rect x="430" y="215" width="298" height="18" rx="9" fill="#242083"/>
+  <rect x="430" y="257" width="350" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="430" y="291" width="310" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="430" y="325" width="240" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="430" y="373" width="136" height="34" rx="17" fill="#F97316"/>
+  <text x="450" y="396" fill="white" font-family="Arial, sans-serif" font-size="15" font-weight="700">DTE Update</text>
+</svg>
