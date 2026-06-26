@@ -3,8 +3,7 @@ export type Role =
   | "regional"
   | "principal"
   | "candidate"
-  | "lecturer"
-  | "accounts";
+  | "lecturer";
 
 export const ROLES: { value: Role; label: string; org: string }[] = [
   { value: "super_admin", label: "Super Admin", org: "DTE Head Office, Mumbai" },
@@ -12,7 +11,6 @@ export const ROLES: { value: Role; label: string; org: string }[] = [
   { value: "principal", label: "Institute Principal", org: "Govt. Polytechnic, Pune" },
   { value: "candidate", label: "Candidate", org: "Applicant / Faculty" },
   { value: "lecturer", label: "CHB Lecturer", org: "Teaching Faculty" },
-  { value: "accounts", label: "Accounts Officer", org: "Finance Cell, DTE" },
 ];
 
 export const ROLE_USERS: Record<Role, { name: string; email: string; designation: string }> = {
@@ -21,7 +19,6 @@ export const ROLE_USERS: Record<Role, { name: string; email: string; designation
   principal: { name: "Dr. S. V. Patil", email: "principal.gppune@dte.gov.in", designation: "Principal, GP Pune" },
   candidate: { name: "Ms. Priya S. Sawant", email: "priya.sawant@applicant.dte.gov.in", designation: "CHB Candidate" },
   lecturer: { name: "Rahul M. Deshpande", email: "rahul.deshpande@chb.dte.gov.in", designation: "CHB Lecturer" },
-  accounts: { name: "Shri. V. K. More", email: "accounts@dtemaharashtra.gov.in", designation: "Accounts Officer" },
 };
 
 export const ANNOUNCEMENTS = [

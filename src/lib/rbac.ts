@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, Briefcase, FileText, Users, Calendar, Receipt, Banknote,
   BarChart3, Shield, ScrollText, ClipboardList,
-  GraduationCap, Building2, UserCircle2, Bell, BookOpen, Wallet, LifeBuoy,
+  GraduationCap, Building2, UserCircle2, Bell, BookOpen, LifeBuoy,
 } from "lucide-react";
 import type { Role } from "./mock-data";
 
@@ -122,27 +122,6 @@ export const NAV_BY_ROLE: Record<Role, NavGroup[]> = {
     },
   ],
 
-  accounts: [
-    {
-      label: "Overview",
-      items: [
-        { label: "Finance Dashboard", to: "/app/dashboard", icon: LayoutDashboard },
-      ],
-    },
-    {
-      label: "Bills",
-      items: [
-        { label: "Pending Bills", to: "/app/bills", icon: Receipt, badge: "23" },
-        { label: "Payment Processing", to: "/app/payments", icon: Wallet },
-      ],
-    },
-    {
-      label: "Insights",
-      items: [
-        { label: "Payment Reports", to: "/app/reports", icon: BarChart3 },
-      ],
-    },
-  ],
 };
 
 // Allowed routes per role — derived from sidebar definitions.
@@ -163,8 +142,7 @@ export const ROLE_PURPOSE: Record<Role, string> = {
   principal: "Institute-level management — recruitment, attendance & bill approvals.",
   candidate: "Applicant self-service — profile, vacancy listings, applications and interview schedule.",
   lecturer: "Lecturer self-service — dashboard, profile, attendance submission and bills.",
-  accounts: "Bill processing, payment release and expenditure reporting.",
 };
 
 // Icons handy for login screen
-export { Shield, Building2, GraduationCap, Users, UserCircle2, Wallet, LifeBuoy, Bell };
+export { Shield, Building2, GraduationCap, Users, UserCircle2, LifeBuoy, Bell };
